@@ -13,18 +13,21 @@ import messagesReducer from './redux/reducers';
 import {
   addMessage,
 } from './redux/actions';
+import React from "react";
+LogBox.ignoreAllLogs(true);
 
 const store: Store = createStore(messagesReducer);
-
-LogBox.ignoreAllLogs(true);
 
 Navigation.registerComponent('test1.home', () => props => (
     <Provider store={store}>
         <App {...props} />
     </Provider>
 ), () => App);
-
-Navigation.registerComponent('test1.info', () => Info);
+Navigation.registerComponent('test1.info', () => props => (
+    <Provider store={store}>
+        <Info {...props} />
+    </Provider>
+), () => Info);
 
 Navigation.events().registerAppLaunchedListener(() => {
    Navigation.setRoot({
@@ -38,10 +41,10 @@ Navigation.events().registerAppLaunchedListener(() => {
                    topBar: {
                      title: {
                        text: 'Home Page',
-                     },
-                   },
-                 },
-             },
+                     }
+                   }
+                 }
+             }
            }
          ]
        }
