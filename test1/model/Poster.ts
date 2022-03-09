@@ -1,4 +1,9 @@
 
+interface Item {
+    title: String;
+    items: []
+}
+
 export class Poster {
 
     poster: any;
@@ -13,15 +18,12 @@ export class Poster {
        const result = await fetch("https://raw.githubusercontent.com/24i/smartapps-test/main/data.json");
        const items = await result.json();
 
-       if (items != null)
-            return new Poster(items);
-        else
-            return new Poster(null);
+       return new Poster(items);
     }
 
     adjustPosterData () : any[] {
         if (this.poster != null) {
-            this.poster.carousels.map((item: { title: String; items: [] }, index: any) => {
+            this.poster.carousels.map((item: Item, index: any) => {
                 let i = {
                     title: item.title,
                     data: item.items
