@@ -9,24 +9,28 @@
 import React, {Component} from 'react';
 import type from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  SectionList,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View,
+    SectionList,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    RefreshControl, Button, Alert,
 } from 'react-native';
 
-import { Navigation } from 'react-native-navigation';
+import {Poster} from "./model/Poster";
+import {Navigation} from 'react-native-navigation';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {addMessage} from './redux/actions';
 type Props = {}
 
-export default class App extends React.Component<any, any> {
+class App extends React.Component<any, any> {
 
     public listItems: any[] = [];
 
@@ -41,27 +45,13 @@ export default class App extends React.Component<any, any> {
 
     componentDidMount() {
 
-        //get data
-        fetch("https://raw.githubusercontent.com/24i/smartapps-test/main/data.json")
-        .then(response => {
-            return response.json();
-        })
-        .then(response => {
-
-            if (response.carousels.length > 0) {
-                response.carousels.map((item: { title: String; items: [] }, index: any) => {
-                    let i = {
-                        title: item.title,
-                        data: item.items
-                    }
-                    this.listItems.push(i);
-                })
-                this.setState({ data: this.listItems, refreshing: false });
-            }
-
+        new Poster(null).getPosterData().then((data: Poster) => {
+            const posters = data.adjustPosterData();
+            this.setState({ data: posters, refreshing: false });
         }).catch((error) => {
-            console.error(error);
+            Alert.alert("Error", "Could not get source");
         });
+
     }
 
     TestItem = (info: any) => {
@@ -108,37 +98,44 @@ export default class App extends React.Component<any, any> {
 
        return (
 
-        <SafeAreaView style={styles.top_container}>
+            <SafeAreaView style={styles.top_container}>
 
-          <SectionList
-            contentContainerStyle={styles.contentContainerStyle}
-            stickySectionHeadersEnabled={true}
-            sections={this.state.data}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => this.TestItem(item)}
-            renderSectionHeader={({ section: { title } }) => (
-              <View style={styles.section_title}><Text numberOfLines={1} style={styles.header}>{title}</Text></View>
-            )}
-            refreshControl={
-                <RefreshControl
-                    //refresh control used for the Pull to Refresh
-                    title={"Loading..."}
-                    titleColor={'#3a6b33'}
-                    refreshing={this.state.refreshing}
-                    enabled={this.state.refreshing}
-                    progressViewOffset={10}
-                    colors={['white']}
-                    progressBackgroundColor={'#276e66'}
-                    onRefresh={() => {
+              <SectionList
+                contentContainerStyle={styles.contentContainerStyle}
+                stickySectionHeadersEnabled={true}
+                sections={this.state.data}
+                keyExtractor={(item, index) => item + index}
+                renderItem={({ item }) => this.TestItem(item)}
+                renderSectionHeader={({ section: { title } }) => (
+                  <View style={styles.section_title}><Text numberOfLines={1} style={styles.header}>{title}</Text></View>
+                )}
+                refreshControl={
+                    <RefreshControl
+                        //refresh control used for the Pull to Refresh
+                        title={"Loading..."}
+                        titleColor={'#3a6b33'}
+                        refreshing={this.state.refreshing}
+                        enabled={this.state.refreshing}
+                        progressViewOffset={10}
+                        colors={['white']}
+                        progressBackgroundColor={'#276e66'}
+                        onRefresh={() => {
 
-                    }}
-                />
-            }
-          />
-        </SafeAreaView>
+                        }}
+                    />
+                }
+              />
+
+            </SafeAreaView>
       );
     }
 }
+const mapStateToProps = (state: any) => {
+    const {messages} = state;
+    return {messages};
+};
+const mapDispatchToProps = (dispatch: any) => bindActionCreators({ addMessage }, dispatch);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 const styles = StyleSheet.create({
   text_item: {
