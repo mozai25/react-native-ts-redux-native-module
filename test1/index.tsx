@@ -4,8 +4,8 @@
 
 import { Navigation } from "react-native-navigation";
 import {LogBox} from 'react-native';
-import App from './App';
-import Info from './Info';
+import App from './windows/App';
+import Info from './windows/Info';
 
 import {Provider} from 'react-redux';
 import {createStore, Store} from 'redux';

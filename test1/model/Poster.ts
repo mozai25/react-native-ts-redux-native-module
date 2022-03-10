@@ -22,6 +22,7 @@ export class Poster {
     }
 
     adjustPosterData () : any[] {
+
         if (this.poster != null) {
             this.poster.carousels.map((item: Item, index: any) => {
                 let i = {

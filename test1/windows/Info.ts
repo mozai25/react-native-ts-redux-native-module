@@ -7,11 +7,11 @@
  */
 
 import React from 'react';
-import {ViewDetails} from './components/ViewDetails';
+import {ViewDetails} from '../components/ViewDetails';
 
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {addMessage} from './redux/actions';
+import {addMessage} from '../redux/actions';
 import {Alert} from "react-native";
 
 type Props = {}

@@ -23,11 +23,11 @@ import {
     RefreshControl, Button, Alert,
 } from 'react-native';
 
-import {Poster} from "./model/Poster";
+import {Poster} from "../model/Poster";
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {addMessage} from './redux/actions';
+import {addMessage} from '../redux/actions';
 type Props = {}
 
 class App extends React.Component<any, any> {
