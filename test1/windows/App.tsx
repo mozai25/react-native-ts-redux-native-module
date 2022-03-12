@@ -24,16 +24,20 @@ import {
     Button,
     Alert,
     FlatList,
+    Animated,
+    Easing,
 } from 'react-native';
 
+import {ClickFunc} from '../model/Interfaces';
 import EmptyImage from "../components/EmptyImage";
+import {TestItem} from "../components/TestItem";
 import {Poster} from "../model/Poster";
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {addMessage} from '../redux/actions';
-type Props = {}
 
+type Props = {}
 class App extends React.Component<any, any> {
 
     public listItems: any[] = [];
@@ -45,6 +49,7 @@ class App extends React.Component<any, any> {
             data: [],
             refreshing: true,
         };
+
     }
 
     componentDidMount() {
@@ -56,40 +61,6 @@ class App extends React.Component<any, any> {
             Alert.alert("Error", "Could not get source");
         });
 
-    }
-
-    TestItem = (info: any) => {
-
-      return (
-          <View style={styles.item}>
-              <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => {
-
-                    Navigation.push(this.props.componentId, {
-                      component: {
-                        name: 'test1.info',
-                        passProps: {
-                          poster: info
-                        },
-                        options: {
-                          topBar: {
-                            title: {
-                              text: 'Info Page'
-                            }
-                          }
-                        }
-                      }})
-                  }} >
-                  <View style={styles.item_container}>
-                      <EmptyImage url={{uri: info.posterUrl}} style={styles.stretch_new} />
-                  </View>
-                  <View style={styles.text_item}>
-                    <Text numberOfLines={1} style={styles.title}>{info.title}</Text>
-                  </View>
-              </TouchableOpacity>
-          </View>
-      );
     }
 
     render() {
@@ -113,7 +84,26 @@ class App extends React.Component<any, any> {
                             horizontal={true}
                             data={section.data}
                             renderItem={({ item }) => {
-                                return this.TestItem(item);
+                                return <TestItem info={item} callback={(check: ClickFunc)=>{
+
+                                    if (check.done) {
+                                        Navigation.push(this.props.componentId, {
+                                            component: {
+                                                name: 'test1.info',
+                                                passProps: {
+                                                    poster: item
+                                                },
+                                                options: {
+                                                    topBar: {
+                                                        title: {
+                                                            text: 'Info Page'
+                                                        }
+                                                    }
+                                                }
+                                            }})
+                                    }
+
+                                }} />;
                             }}
                             showsHorizontalScrollIndicator={false}
                         />
@@ -146,19 +136,6 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({ addMessage },
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 const styles = StyleSheet.create({
-  text_item: {
-    flexDirection: 'row',
-    padding: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 0,
-    borderColor: 'green',
-  },
-  item_container: {
-    height: 'auto',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   section_title: {
     flexDirection: 'column',
     marginBottom: 5,
@@ -195,29 +172,8 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
   },
-  title: {
-    flex: 1,
-    fontSize: 12,
-    textAlign: 'center',
-    borderColor: 'red',
-    borderWidth: 0,
-    flexWrap: 'wrap',
-  },
-  item: {
-    //flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: '#ffffff',
-    marginTop: 2,
-    marginLeft: 2,
-    marginRight: 2,
-    marginBottom: 2,
-    height: 200,
-    width: 140,
-  },
   stretch_new: {
-    width: 170,
-    height: 170,
-    resizeMode: 'contain',
+
   },
 });
 

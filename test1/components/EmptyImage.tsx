@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import {
-    Image, StyleSheet,
+    StyleSheet, Animated
 } from 'react-native';
 
 type Props = {
@@ -8,21 +8,20 @@ type Props = {
     style: any;
 }
 
-export default class EmptyImage extends Component<any, any> {
+export default class EmptyImage extends Component<Props, any> {
 
     constructor(props: Props) {
         super(props);
-
         this.state = {showDefault: true};
     }
 
     render() {
-        const { url, style } = this.props;
+
         let image = this.state.showDefault ? require('../assets/images/loading-icon.gif') : this.props.url;
         let imageStyle = this.state.showDefault ? styles.loading_new : this.props.style;
 
         return (
-            <Image
+            <Animated.Image
                 style={imageStyle}
                 source={image}
                 onLoadEnd={() => this.setState({showDefault: false})}
