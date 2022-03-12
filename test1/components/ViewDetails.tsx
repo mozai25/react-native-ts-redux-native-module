@@ -1,16 +1,12 @@
-import React, {PureComponent, Component, FunctionComponent, FC, useEffect} from 'react';
-
+import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
-  SectionList,
   Image,
   Dimensions,
-  TouchableOpacity,
 } from "react-native";
 
 export const ViewDetails: (posterData: { posterData: any }) => void = ({ posterData }) => {
