@@ -38,7 +38,7 @@ export class TestItem extends React.Component<ItemProps, any> {
                         });
                     }} >
                     <View style={styles.item_container}>
-                        <EmptyImage url={{uri: this.props.info.posterUrl}} style={{
+                        <EmptyImage url={this.props.info.posterUrl} style={{
                             width: 170,
                                 height: 170,
                                 resizeMode: 'contain',
