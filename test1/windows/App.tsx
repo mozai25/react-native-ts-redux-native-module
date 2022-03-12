@@ -20,9 +20,13 @@ import {
     Image,
     Dimensions,
     TouchableOpacity,
-    RefreshControl, Button, Alert,
+    RefreshControl,
+    Button,
+    Alert,
+    FlatList,
 } from 'react-native';
 
+import EmptyImage from "../components/EmptyImage";
 import {Poster} from "../model/Poster";
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
@@ -58,7 +62,6 @@ class App extends React.Component<any, any> {
 
       return (
           <View style={styles.item}>
-
               <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
@@ -78,18 +81,13 @@ class App extends React.Component<any, any> {
                         }
                       }})
                   }} >
-
                   <View style={styles.item_container}>
-                    <Image
-                      style={styles.stretch_new}
-                      source={{uri: info.posterUrl}}
-                    />
+                      <EmptyImage url={{uri: info.posterUrl}} style={styles.stretch_new} />
                   </View>
                   <View style={styles.text_item}>
                     <Text numberOfLines={1} style={styles.title}>{info.title}</Text>
                   </View>
               </TouchableOpacity>
-
           </View>
       );
     }
@@ -99,19 +97,30 @@ class App extends React.Component<any, any> {
        return (
 
             <SafeAreaView style={styles.top_container}>
-
               <SectionList
                 contentContainerStyle={styles.contentContainerStyle}
-                stickySectionHeadersEnabled={true}
+                stickySectionHeadersEnabled={false}
                 sections={this.state.data}
                 keyExtractor={(item, index) => item + index}
-                renderItem={({ item }) => this.TestItem(item)}
-                renderSectionHeader={({ section: { title } }) => (
-                  <View style={styles.section_title}><Text numberOfLines={1} style={styles.header}>{title}</Text></View>
+                renderItem={({ item }) => {
+                   //return this.TestItem(item)
+                   return null;
+                }}
+                renderSectionHeader={({ section }) => (
+                    <View style={styles.section_title}>
+                        <Text style={styles.header}>{section.title}</Text>
+                        <FlatList
+                            horizontal={true}
+                            data={section.data}
+                            renderItem={({ item }) => {
+                                return this.TestItem(item);
+                            }}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </View>
                 )}
                 refreshControl={
                     <RefreshControl
-                        //refresh control used for the Pull to Refresh
                         title={"Loading..."}
                         titleColor={'#3a6b33'}
                         refreshing={this.state.refreshing}
@@ -125,7 +134,6 @@ class App extends React.Component<any, any> {
                     />
                 }
               />
-
             </SafeAreaView>
       );
     }
@@ -152,18 +160,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   section_title: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginBottom: 5,
-    width: Dimensions.get('window').width
+    width: '100%'
   },
   top_container: {
-    backgroundColor: '#cccccc'
+    backgroundColor: '#cccccc',
+    flex: 1,
   },
   contentContainerStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+     flexDirection: 'column',
   },
   sectionContainer: {
     marginTop: 32,
@@ -186,7 +192,6 @@ const styles = StyleSheet.create({
     borderColor: 'red',
     fontSize: 28,
     backgroundColor: "#fff",
-    flexDirection: 'row',
     width: '100%',
     textAlign: 'center',
   },
@@ -196,19 +201,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderColor: 'red',
     borderWidth: 0,
+    flexWrap: 'wrap',
   },
   item: {
-    flexDirection: 'column',
+    //flexDirection: 'column',
     borderWidth: 1,
     borderColor: '#ffffff',
     marginTop: 2,
     marginLeft: 2,
     marginRight: 2,
     marginBottom: 2,
+    height: 200,
+    width: 140,
   },
   stretch_new: {
-    width: 100,
-    height: 100,
+    width: 170,
+    height: 170,
     resizeMode: 'contain',
   },
 });
