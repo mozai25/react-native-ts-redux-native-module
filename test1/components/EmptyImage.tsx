@@ -17,7 +17,7 @@ export default class EmptyImage extends Component<Props, any> {
 
     render() {
 
-        let image = this.state.showDefault ? require('../assets/images/loading-icon.gif') : this.props.url;
+        let image = this.state.showDefault ? require('../assets/images/loading-icon.gif') : {uri: this.props.url};
         let imageStyle = this.state.showDefault ? styles.loading_new : this.props.style;
 
         return (
