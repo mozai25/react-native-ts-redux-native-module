@@ -103,7 +103,7 @@ class App extends React.Component<any, any> {
                                             }})
                                     }
 
-                                }} />;
+                                }}></TestItem>;
                             }}
                             showsHorizontalScrollIndicator={false}
                         />

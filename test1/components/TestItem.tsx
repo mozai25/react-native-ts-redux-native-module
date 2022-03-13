@@ -9,7 +9,7 @@ type ItemProps = {
     callback: (i: ClickFunc)=>{},
 }
 
-export class TestItem extends React.Component<ItemProps, any> {
+export class TestItem extends React.Component<any, any> {
 
     public targetRotateSmall: any;
 
@@ -40,15 +40,15 @@ export class TestItem extends React.Component<ItemProps, any> {
                     <View style={styles.item_container}>
                         <EmptyImage url={this.props.info.posterUrl} style={{
                             width: 170,
-                                height: 170,
-                                resizeMode: 'contain',
-                                transform: [
-                                {
-                                    rotateY: this.targetRotateSmall.interpolate({
-                                        inputRange: [0, 360],
-                                        outputRange: ['0deg', '360deg'],
-                                    })
-                                }]
+                            height: 170,
+                            resizeMode: 'contain',
+                            transform: [
+                            {
+                                rotateY: this.targetRotateSmall.interpolate({
+                                    inputRange: [0, 360],
+                                    outputRange: ['0deg', '360deg'],
+                                })
+                            }]
                         }} />
                     </View>
                     <View style={styles.text_item}>
