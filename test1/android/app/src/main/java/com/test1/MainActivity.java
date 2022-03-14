@@ -1,6 +1,5 @@
 package com.test1;
 
-import com.facebook.react.ReactActivity;
 import com.reactnativenavigation.NavigationActivity;
 
 public class MainActivity extends NavigationActivity {
@@ -14,5 +13,13 @@ public class MainActivity extends NavigationActivity {
 //  protected String getMainComponentName() {
 //    return "test1";
 //  }
+
+  @Override
+  protected void onStart() {
+      super.onStart();
+
+
+
+  }
 
 }

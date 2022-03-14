@@ -26,9 +26,11 @@ import {
     FlatList,
     Animated,
     Easing,
+    NativeModules,
+    NativeEventEmitter, EmitterSubscription
 } from 'react-native';
 
-import {ClickFunc} from '../model/Interfaces';
+import {ClickFunc, HelloInterfaceFromAndroid} from '../model/Interfaces';
 import EmptyImage from "../components/EmptyImage";
 import {TestItem} from "../components/TestItem";
 import {Poster} from "../model/Poster";
@@ -37,10 +39,15 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {addMessage} from '../redux/actions';
 
+const HelloFromAndroid = NativeModules.HelloFromAndroid;
+const helloEmitter = new NativeEventEmitter(HelloFromAndroid);
+
+const testEventName = "SendHelloEvent";
 type Props = {}
 class App extends React.Component<any, any> {
 
     public listItems: any[] = [];
+    public testEvent: EmitterSubscription | undefined;
 
     constructor(props: Props) {
         super(props);
@@ -50,16 +57,32 @@ class App extends React.Component<any, any> {
             refreshing: true,
         };
 
+        //catch event
+        this.testEvent = helloEmitter.addListener(testEventName,
+            (data: HelloInterfaceFromAndroid) => {
+                Alert.alert("Hello!", data[0].action);
+            },
+        );
     }
 
     componentDidMount() {
 
+        //call method
+        HelloFromAndroid.HelloMethod();
+
         new Poster(null).getPosterData().then((data: Poster) => {
             const posters = data.adjustPosterData();
             this.setState({ data: posters, refreshing: false });
+
         }).catch((error) => {
             Alert.alert("Error", "Could not get source");
         });
+
+    }
+
+    componentWillUnmount() {
+
+        if(this.testEvent != undefined) this.testEvent.remove();
 
     }
 
